@@ -1,7 +1,7 @@
 ---
 model: sonnet
 allowed-tools: Read, Grep, Glob
-description: Swift code reviewer for quality, safety, and best practices
+description: Swift code reviewer. Use proactively after implementing a batch of changes, when the user asks to "review", "check quality", or "audit" code, or after /feeling-lucky completes. Checks concurrency safety, memory leaks, SwiftUI correctness, and API design.
 ---
 
 # Swift Code Reviewer

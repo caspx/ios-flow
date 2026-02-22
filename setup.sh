@@ -37,6 +37,13 @@ if [[ ! "$ORGANIZATION" =~ ^[a-z][a-z0-9-]*$ ]]; then
   exit 1
 fi
 
+# Prompt for Apple Development Team ID
+read -p "Apple Development Team ID (e.g. 3ZBR92RRDR, or press Enter to skip): " TEAM_ID
+if [[ -z "$TEAM_ID" ]]; then
+  TEAM_ID="TEAM_ID"
+  echo -e "  ${YELLOW}⚠ Skipped — you'll need to set DEVELOPMENT_TEAM in project.yml before releasing${NC}"
+fi
+
 echo -e "\n${BOLD}Setting up ${GREEN}${APP_NAME}${NC} ${BOLD}(com.${ORGANIZATION}.${APP_NAME})${NC}\n"
 
 # Replace placeholders in project files
@@ -45,6 +52,7 @@ for file in project.yml CLAUDE.md; do
   if [[ -f "$file" ]]; then
     sed -i '' "s/APP_NAME/${APP_NAME}/g" "$file"
     sed -i '' "s/ORGANIZATION/${ORGANIZATION}/g" "$file"
+    sed -i '' "s/TEAM_ID/${TEAM_ID}/g" "$file"
     echo "  ✓ ${file}"
   fi
 done
@@ -117,6 +125,36 @@ struct ${APP_NAME}Tests {
 SWIFT
   echo "  ✓ ${TEST_FILE}"
 fi
+
+# Create asset catalog with AppIcon placeholder
+echo "Creating asset catalog..."
+ICON_DIR="Sources/${APP_NAME}/Assets.xcassets/AppIcon.appiconset"
+mkdir -p "$ICON_DIR"
+cat > "$ICON_DIR/Contents.json" << 'JSON'
+{
+  "images" : [
+    {
+      "filename" : "AppIcon.png",
+      "idiom" : "universal",
+      "platform" : "ios",
+      "size" : "1024x1024"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
+JSON
+cat > "Sources/${APP_NAME}/Assets.xcassets/Contents.json" << 'JSON'
+{
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
+JSON
+echo -e "  ${YELLOW}⚠ Add a 1024x1024 AppIcon.png to ${ICON_DIR}/ before releasing${NC}"
 
 # Create docs structure
 echo "Creating docs structure..."

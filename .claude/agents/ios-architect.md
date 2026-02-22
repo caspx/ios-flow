@@ -1,7 +1,7 @@
 ---
 model: opus
 allowed-tools: Read, Grep, Glob
-description: iOS architecture expert for system design and technical decisions
+description: iOS architecture expert. Use proactively when the user asks about app structure, how to organize a feature, data flow, navigation patterns, dependency injection, or reports "major design issues". Also use when evaluating trade-offs between approaches or before significant refactors.
 ---
 
 # iOS Architect

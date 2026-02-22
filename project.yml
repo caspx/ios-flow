@@ -21,15 +21,19 @@ targets:
     sources:
       - path: Sources/APP_NAME
     resources:
+      - path: Sources/APP_NAME/Assets.xcassets
       - path: Resources
         optional: true
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.ORGANIZATION.APP_NAME
+        DEVELOPMENT_TEAM: TEAM_ID
+        CODE_SIGN_STYLE: Automatic
         INFOPLIST_GENERATION_MODE: GeneratedFile
         MARKETING_VERSION: "1.0.0"
         CURRENT_PROJECT_VERSION: "1"
         GENERATE_INFOPLIST_FILE: true
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: true
         INFOPLIST_KEY_UILaunchScreen_Generation: true
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait

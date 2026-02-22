@@ -31,6 +31,17 @@ Use XcodeBuildMCP tools for all build operations. Key tools:
 
 Always use these tools instead of raw `xcodebuild` commands.
 
+## After Every Code Change
+
+This applies to ALL code changes — whether from a command, agent, or natural conversation:
+
+1. **Build** — run `xcodebuildmcp_build`. Fix any errors before proceeding.
+2. **Test** — run `xcodebuildmcp_test`. Fix any failures before proceeding.
+3. **Screenshot** — if the change affects UI, take a simulator screenshot to verify.
+4. **Review** — for non-trivial changes (new types, concurrency code, architecture changes), delegate to the `swift-reviewer` agent.
+
+Do not consider a change complete until build and tests pass.
+
 ## XcodeGen
 
 The `.xcodeproj` is generated from `project.yml`. Rules:
@@ -100,14 +111,38 @@ Always take a simulator screenshot after making UI changes.
 - Use Combine for new code (use async/await and @Observable)
 - Commit `.xcodeproj` to git
 
-## Planning Workflow
+## Workflow
 
-For new features, follow this structured workflow:
+### Initial Build
 
-1. **PRD** (`/create-prd`) — product requirements for the entire app (one-time)
-2. **Spec** (`/plan-feature <name>`) — detailed spec + ordered task list per feature
-3. **Implement** (`/implement-feature <name>`) — one task at a time, build & test after each
-4. **UI** (`/design-view`) — screenshot-driven UI implementation
+1. **PRD** (`/create-prd`) — product requirements with implementation roadmap (one-time)
+2. **Build everything** (`/feeling-lucky`) — plans and implements all features from the roadmap
+   - Or step-by-step: `/plan-feature <name>` → `/implement-feature <name>` per feature
+
+### Iteration (post-initial-build)
+
+After the app is running, the user will provide feedback as natural conversation — bug reports, UI changes, feature requests. Route each item to the right approach:
+
+- **Bug fixes / minor issues** — fix directly in conversation, build and verify
+- **UI changes** ("move this", "change color", "redesign the screen") — use the `/design-view` screenshot feedback loop
+- **New features** — use `/plan-feature` → `/implement-feature` for anything substantial
+- **Architecture concerns** ("this feels wrong", "how should I structure...") — delegate to the `ios-architect` agent
+- **Quality check** ("review the code", "check for issues") — delegate to the `swift-reviewer` agent
+- **Risky experiments** ("try a completely different approach") — use a worktree to isolate changes
+
+### Agents
+
+Agents auto-delegate based on context. Available agents:
+
+- **ios-architect** (Opus, read-only) — architecture decisions, feature structure, design trade-offs
+- **swift-reviewer** (Sonnet, read-only) — code quality, concurrency safety, SwiftUI correctness
+
+### When to Use Worktrees
+
+Use `EnterWorktree` for:
+- Experimental changes that might break the app
+- Large refactors where you want to compare before/after
+- Trying an alternative approach before committing to it
 
 Spec and task files use `@import` references to link to each other.
 
