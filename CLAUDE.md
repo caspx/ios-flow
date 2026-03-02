@@ -125,6 +125,7 @@ After the app is running, the user will provide feedback as natural conversation
 
 - **Bug fixes / minor issues** — fix directly in conversation, build and verify
 - **UI changes** ("move this", "change color", "redesign the screen") — use the `/design-view` screenshot feedback loop
+- **UI exploration** ("try 3 color palettes", "show me layout options") — use `/design-variants` to generate parallel variants in worktrees
 - **New features** — use `/plan-feature` → `/implement-feature` for anything substantial
 - **Architecture concerns** ("this feels wrong", "how should I structure...") — delegate to the `ios-architect` agent
 - **Quality check** ("review the code", "check for issues") — delegate to the `swift-reviewer` agent
